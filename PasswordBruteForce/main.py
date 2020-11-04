@@ -1,8 +1,8 @@
 import requests
 from termcolor import cprint
 
-passwordlist = open('passwords.txt', 'r')
-email = 'nona@gmail.com'
+passwordlist = open('rockyou.txt', 'r')
+email = 'anonekimi@gmail.com'
 
 for line in passwordlist:
     password = line.strip()
