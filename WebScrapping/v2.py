@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 import concurrent.futures, time
 
+#TODO: ADD STOPPER
 
 MAX_THREADS = 30
 
@@ -51,7 +52,7 @@ def scrap(page):
 
 
 if __name__ == '__main__':
-    batas = range(200,205)
+    batas = range(500)
     threads = min(MAX_THREADS, len(batas))
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
