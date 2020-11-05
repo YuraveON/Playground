@@ -1,10 +1,11 @@
-from socket import error as SocketError
 import csv
 import errno
-from bs4 import BeautifulSoup
+from socket import error as SocketError
 from urllib.request import urlopen
 
-#TODO: BENERIN OUTPUT CSV
+from bs4 import BeautifulSoup
+
+# TODO: BENERIN OUTPUT CSV
 
 try:
     url = "http://indonesiasatu.co/category/berita"
@@ -18,7 +19,7 @@ try:
         tanggalHeadline = he.find('span', 'date').text
         kontenHeadline = he.find('div', 'blog-content').text.strip().split("\n ")[3]
 
-    beritas=[]
+    beritas = []
     berita = soup.findAll('div', 'blog-style')
     for be in berita:
         judulBerita = be.find('div', 'title').text.strip()
@@ -37,8 +38,5 @@ try:
 except SocketError as e:
     print("Servernya ngadat brow")
     if e.errno != errno.ECONNRESET:
-        raise # Not error we are looking for
-    pass # Handle error here.
-
-
-
+        raise  # Not error we are looking for
+    pass  # Handle error here.
