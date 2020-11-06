@@ -1,15 +1,13 @@
-import csv
-import errno
+
+import threading, requests, time, errno, csv, termcolor
 from socket import error as SocketError
-import requests
 from bs4 import BeautifulSoup
-import concurrent.futures, time
 
-#TODO: ADD STOPPER
 
-MAX_THREADS = 30
+stop_scrap = False
 
 def scrap(page):
+    global stop_scrap
     try:
         url = f"https://indopos.co.id/page/{page}/?s=corona"
         header = {
@@ -17,7 +15,7 @@ def scrap(page):
         }
         results = requests.get(url, headers=header)
         status = results.status_code
-        print(f'Scrapping halaman {page}\n')
+        print(termcolor.colored(f'Scrapping halaman {page}', 'green'))
 
         if status == 200:
             soup = BeautifulSoup(results.text, "html.parser")
@@ -38,11 +36,11 @@ def scrap(page):
                     writer = csv.writer(file)
                     writer.writerow(d)
 
-            time.sleep(0.25)
-
         else:
-            print('Halaman habis')
-            exit()
+            print(termcolor.colored(f'Halaman {page} tidak ada', 'red'))
+            stop_scrap = True
+
+
 
     except SocketError as e:
         print("Servernya ngadat brow")
@@ -51,9 +49,11 @@ def scrap(page):
         pass  # Handle error here.
 
 
-if __name__ == '__main__':
-    batas = range(500)
-    threads = min(MAX_THREADS, len(batas))
-
-    with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
-        executor.map(scrap, batas)
+batas = range(1,500)
+for page in batas:
+    if stop_scrap == True:
+        t.join()
+        exit()
+    t = threading.Thread(target=scrap, args=(page,))
+    t.start()
+    time.sleep(0.1)
